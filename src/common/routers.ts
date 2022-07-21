@@ -1,10 +1,13 @@
 const routeList = [
   {
     path: '/',
-    component: '@/layouts/BaseLayout.js',
+    component: '@/layouts/BaseLayout.tsx',
     routes: [
-      { exact: true, path: '/', redirect: '/authorTool' },
-      { path: '/authorTool', component: '@/pages/HomePage' },
+      { exact: true, path: '/', redirect: '/home' },
+      { path: '/home', component: '@/pages/HomePage' },
+      { path: '/example1', component: '@/pages/example1' },
+      { path: '/example2', component: '@/pages/example2' },
+      { path: '/example3', component: '@/pages/example3' },
     ],
   },
 ];
