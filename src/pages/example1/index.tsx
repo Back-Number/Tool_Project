@@ -1,7 +1,7 @@
 import styles from './styles.less';
 import { useEffect } from 'react';
 import * as THREE from 'three';
-// import { createMeshesFromMultiMaterialMesh } from '../../../node_modules/three/examples/jsm/utils/SceneUtils'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 /**
  *
@@ -58,9 +58,14 @@ const Example1 = (props: any) => {
       ring.position.set(0, 20, 0);
       scene.add(ring);
 
+      // 创建轨道控制器
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.update();
+
       // 启动渲染并加载节点
       const render = () => {
         requestAnimationFrame(render);
+        controls.update();
         renderer.render(scene, camera);
       };
       render();
