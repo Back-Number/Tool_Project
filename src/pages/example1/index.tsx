@@ -1,7 +1,9 @@
 import styles from './styles.less';
 import { useEffect } from 'react';
 import * as THREE from 'three';
+// import * as dat from 'dat.gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import * as SceneUtils from 'three/examples/jsm/utils/SceneUtils';
 
 /**
  *
@@ -20,12 +22,16 @@ const Example1 = (props: any) => {
       // 材质库
       const m1 = new THREE.MeshBasicMaterial({
         color: 0xffdeb4,
-        side: THREE.DoubleSide, // 双面材质
+        side: THREE.DoubleSide,
       });
       const m2 = new THREE.MeshBasicMaterial({
         color: 0xffb4b4,
-        side: THREE.DoubleSide, // 双面材质
+        side: THREE.DoubleSide,
       });
+      const m3 = new THREE.MeshLambertMaterial({
+        color: 0xb2a4ff,
+        wireframe: true,
+      }); // 线框材质
 
       // 创建3要素
       const scene = new THREE.Scene();
@@ -34,7 +40,7 @@ const Example1 = (props: any) => {
 
       // 渲染场景大小，背景颜色，允许阴影
       renderer.setClearColor(new THREE.Color(0xfff9ca));
-      renderer.setSize(window.innerWidth * 0.75, window.innerHeight * 0.75);
+      renderer.setSize(window.innerWidth * 0.9, window.innerHeight);
       renderer.shadowMapEnabled = true;
       renderer.shadowMapType = THREE.PCFShadowMap; //设置阴影的类型
 
@@ -54,7 +60,8 @@ const Example1 = (props: any) => {
 
       // 创建圆环
       const g2 = new THREE.TorusGeometry(5, 1, 16, 50, Math.PI * 2);
-      const ring = new THREE.Mesh(g2, m2);
+      const ringGroup = [m2, m3];
+      const ring = SceneUtils.createMultiMaterialObject(g2, ringGroup);
       ring.position.set(0, 20, 0);
       scene.add(ring);
 
