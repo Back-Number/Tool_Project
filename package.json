@@ -1,5 +1,5 @@
 {
-  "name": "umi-micro",
+  "name": "author_tool",
   "scripts": {
     "start": "set PORT=8058&&umi dev",
     "build": "umi build",
