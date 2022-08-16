@@ -1,7 +1,25 @@
-const HomePage = (props: any) => {
-  console.log('子应用数据', props);
+import { useCallback } from 'react';
+import { Button } from 'antd';
 
-  return <div>主页面</div>;
+const HomePage = (props: any) => {
+  const btnClick = useCallback(() => {
+    let flag = 1;
+    return () => {
+      console.log('flag', flag);
+      if (flag) {
+        flag = 0;
+        console.log(flag);
+      }
+    };
+  }, []);
+
+  return (
+    <div>
+      <Button type="primary" onClick={btnClick()}>
+        主页
+      </Button>
+    </div>
+  );
 };
 
 export default HomePage;
