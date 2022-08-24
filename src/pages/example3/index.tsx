@@ -1,12 +1,9 @@
 import styles from './styles.less';
 import { useEffect } from 'react';
 import * as THREE from 'three';
-// import * as dat from 'dat.gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-// import * as temp from '../../asset/3Dmodel/Lantern/glTF/Lantern'
-// import * as SceneUtils from 'three/examples/jsm/utils/SceneUtils';
-// import { createRandomNumber } from '../../utils/utils';
+// import * as time from '';
 
 const Example3 = (props: any) => {
   useEffect(() => {
@@ -56,18 +53,19 @@ const Example3 = (props: any) => {
       // 外部模型导入
       const gltfLoader = new GLTFLoader();
       gltfLoader.load(
-        '../../asset/3Dmodel/Lantern/glTF/Lantern.gltf',
+        'https://github.com/Back-Number/Tool_Project/blob/main/public/models/Lantern/glTF/Lantern.gltf',
+        // '/models/Lantern/glTF/Lantern.gltf',
         (gltf) => {
-          console.log('success');
+          console.log('导入成功');
           scene.add(gltf.scene.children[0]);
           console.log(gltf);
         },
         (progress) => {
-          console.log('progress');
+          console.log('导入中...');
           console.log(progress);
         },
         (error) => {
-          console.log('error');
+          console.log('导入错误');
           console.log(error);
         },
       );
