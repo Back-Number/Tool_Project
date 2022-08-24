@@ -7,6 +7,15 @@ export default defineConfig({
   qiankun: {
     slave: {},
   },
+  chainWebpack(config) {
+    config.module
+      .rule('glft')
+      .test(/\.(glft)$/)
+      .use()
+      .loader('url-loader')
+      .options('$')
+      .end();
+  },
   nodeModulesTransform: {
     type: 'none',
   },

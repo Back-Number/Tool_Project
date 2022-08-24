@@ -1,11 +1,14 @@
 import styles from './styles.less';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 // import * as time from '';
 
 const Example3 = (props: any) => {
+  // const [lantern, setLantern] = useState<any>(undefined);
+  // const [myScene,setMyScene]=useState<any>(undefined)
+
   useEffect(() => {
     let webGLRef = document.getElementById('ref');
     if (webGLRef) {
@@ -41,10 +44,14 @@ const Example3 = (props: any) => {
       plane.receiveShadow = true;
       scene.add(plane);
 
+      // 添加纯白环境光
+      const light = new THREE.AmbientLight(0xffffff); // soft white light
+      scene.add(light);
+
       // 添加聚光灯
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-      directionalLight.position.set(0, 100, -100);
-      scene.add(directionalLight);
+      // const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      // directionalLight.position.set(0, 100, -100);
+      // scene.add(directionalLight);
 
       // 创建轨道控制器
       const controls = new OrbitControls(camera, renderer.domElement);
@@ -53,16 +60,14 @@ const Example3 = (props: any) => {
       // 外部模型导入
       const gltfLoader = new GLTFLoader();
       gltfLoader.load(
-        'https://github.com/Back-Number/Tool_Project/blob/main/public/models/Lantern/glTF/Lantern.gltf',
-        // '/models/Lantern/glTF/Lantern.gltf',
+        'models/Lantern/glTF/Lantern.gltf',
         (gltf) => {
           console.log('导入成功');
           scene.add(gltf.scene.children[0]);
-          console.log(gltf);
+          // setLantern(gltf.scene.children[0]);
         },
         (progress) => {
           console.log('导入中...');
-          console.log(progress);
         },
         (error) => {
           console.log('导入错误');
