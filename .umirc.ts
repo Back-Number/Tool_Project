@@ -7,13 +7,15 @@ export default defineConfig({
   qiankun: {
     slave: {},
   },
+
+  // 配置glft导入
   chainWebpack(config) {
     config.module
       .rule('glft')
       .test(/\.(glft)$/)
-      .use()
+      .use('')
       .loader('url-loader')
-      .options('$')
+      .options({})
       .end();
   },
   nodeModulesTransform: {
