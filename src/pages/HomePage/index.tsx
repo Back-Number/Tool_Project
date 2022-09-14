@@ -1,23 +1,27 @@
-import { useCallback } from 'react';
+import { useState } from 'react';
 import { Button } from 'antd';
 
 const HomePage = (props: any) => {
-  const btnClick = useCallback(() => {
-    let flag = 1;
-    return () => {
-      console.log('flag', flag);
-      if (flag) {
-        flag = 0;
-        console.log(flag);
-      }
-    };
-  }, []);
+  const [count, setCount] = useState(0);
+
+  const fun1 = () => {
+    return new Promise((resolve, reject) => {
+      setCount((preNum) => {
+        console.log('pre', preNum);
+        resolve(preNum + 1);
+        return preNum + 1;
+      });
+    });
+  };
+
+  const test = () => {
+    fun1();
+  };
 
   return (
     <div>
-      <Button type="primary" onClick={btnClick()}>
-        主页
-      </Button>
+      <Button onClick={test}>测试</Button>
+      <div>{count}</div>
     </div>
   );
 };

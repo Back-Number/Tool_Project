@@ -1,15 +1,11 @@
 import styles from './styles.less';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as SceneUtils from 'three/examples/jsm/utils/SceneUtils';
-// import * as time from '';
 
 const Example3 = (props: any) => {
-  // const [lantern, setLantern] = useState<any>(undefined);
-  // const [myScene,setMyScene]=useState<any>(undefined)
-
   useEffect(() => {
     let webGLRef = document.getElementById('ref');
     if (webGLRef) {
@@ -56,12 +52,12 @@ const Example3 = (props: any) => {
       dirLight.position.set(30, 30, 30);
       dirLight.shadow.camera.near = 0.5;
       dirLight.shadow.camera.far = 100;
-      // dirLight.shadow.camera.bottom = 100;
-      let dirHelper = new THREE.DirectionalLightHelper(dirLight, 10, 0xfc6379);
+      dirLight.shadow.camera.top = 30;
       scene.add(dirLight);
-      scene.add(dirHelper);
-      const helper = new THREE.CameraHelper(dirLight.shadow.camera);
-      scene.add(helper);
+      // let dirHelper = new THREE.DirectionalLightHelper(dirLight, 10, 0xfc6379);
+      // scene.add(dirHelper);
+      // const helper = new THREE.CameraHelper(dirLight.shadow.camera);
+      // scene.add(helper);
 
       // 创建轨道控制器
       const controls = new OrbitControls(camera, renderer.domElement);
@@ -72,16 +68,17 @@ const Example3 = (props: any) => {
       gltfLoader.load(
         'models/Lantern/glTF/Lantern.gltf',
         (gltf) => {
-          console.log('导入成功');
           gltf.scene.traverse(function (node) {
-            console.log('节点', node);
-            node.castShadow = true;
+            console.log(node.type);
+            if (node.type === 'Mesh') {
+              node.castShadow = true;
+            }
           });
-          console.log(gltf.scene);
           scene.add(gltf.scene);
         },
         (progress) => {
           console.log('导入中...');
+          console.log(progress);
         },
         (error) => {
           console.log('导入错误');
@@ -96,6 +93,8 @@ const Example3 = (props: any) => {
       };
 
       render(renderer, scene, camera);
+
+      console.log('originScene', scene);
 
       webGLRef.appendChild(renderer.domElement);
     }

@@ -1,23 +1,3 @@
-import { message } from 'antd';
-
-/**请求方法 */
-export const fetchRequest = async (
-  requestApi: Function,
-  params: Object,
-  callBack: Function,
-) => {
-  let data = await requestApi(params);
-  if (callBack) {
-    if (data.code === 200) {
-      callBack(data);
-    }
-    // else {
-    //   message.warning(`请求错误：${data.msg}`);
-    // }
-  }
-  return data;
-};
-
 /**
  * 生成随机整数
  * @param {number} min 下界
@@ -27,3 +7,13 @@ export const fetchRequest = async (
 export const createRandomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+/**
+ * 判断是否实现了某个接口
+ * @param {number} min 下界
+ * @param  {number} max 上界
+ */
+
+// export function isInterface(object: any): object is A {
+//   return object.discriminator === 'I-AM-A';
+// }
