@@ -1,24 +1,54 @@
 import styles from './styles.less';
 import { useEffect, useState } from 'react';
 import * as THREE from 'three';
-import basicModal from '@/components/basicModel';
-// import * as dat from 'dat.gui';
+import * as dat from 'dat.gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import materialList from './common/materialList';
+import basicModal from '@/components/basicModel';
 import { PromiseRes } from '@/utils/structs';
 // import * as SceneUtils from 'three/examples/jsm/utils/SceneUtils';
 // import { createRandomNumber } from '../../utils/utils';
 
 const Example2 = (props: any) => {
+  // 长宽比例定值
   const PROPORTION = window.innerWidth / window.innerHeight;
+
   const [model3D, setModel3D] = useState(
     new basicModal(
       new THREE.Scene(),
       new THREE.PerspectiveCamera(45, PROPORTION, 1, 1000),
       new THREE.WebGLRenderer(),
     ),
-  );
-  const [uuid, setUuid] = useState('');
+  ); // THREE.js3D实例
+  const [uuid, setUuid] = useState(''); // 记录当前对象uuid
+  const [materialName, setMaterialName] = useState('LineBasicMaterial'); // 记录材质名称
+  const [material, setMaterial] = useState(materialList('LineBasicMaterial')); // 记录当前物体的材质
+  const [gui, setGui] = useState(new dat.GUI({})); // gui控件
+  const [isFirstInit, setIsFirstInit] = useState(true); // 标记是否是初次渲染
+
+  // GUI控件对象
+  const option = {
+    materialName: 'LineBasicMaterial',
+  };
+
+  //材质名列表
+  const nameList = [
+    'LineBasicMaterial',
+    'LineDashedMaterial',
+    'MeshBasicMaterial',
+    'MeshDepthMaterial',
+    'MeshDistanceMaterial',
+    'MeshLambertMaterial',
+  ];
+
+  // 添加参数调节界面
+  const addGUIControl = () => {
+    gui.add(option, 'materialName', nameList).onChange((e: string) => {
+      console.log(e);
+      setMaterialName(e);
+      setMaterial(materialList(e));
+    });
+  };
 
   // 设置相机参数
   const cameraConfig = (camera: THREE.Camera) => {
@@ -73,10 +103,7 @@ const Example2 = (props: any) => {
   // 添加网格模型
   const addMeshObject = () => {
     const geometry = new THREE.TorusKnotGeometry(9, 2.3, 300, 20, 3, 5);
-    const torusKnot = new THREE.Mesh(
-      geometry,
-      materialList['LineBasicMaterial'],
-    );
+    const torusKnot = new THREE.Mesh(geometry, material);
     torusKnot.position.set(0, 20, 0);
     model3D.add(torusKnot);
     return new Promise((resolve, reject) => {
@@ -112,13 +139,13 @@ const Example2 = (props: any) => {
       addAxes();
       addPlane();
       addLight();
+      addGUIControl();
       model3D.setTools(addControls);
       model3D.init(dom);
       addTaskList.push(addMeshObject());
 
       Promise.all(addTaskList).then((res) => {
         if (typeof res[0] === 'string') {
-          console.log('动画注入完毕');
           model3D.setRenderFun(animation(res[0]));
         }
         let result: PromiseRes = {
@@ -130,15 +157,31 @@ const Example2 = (props: any) => {
     });
   };
 
+  // 初始化场景
   useEffect(() => {
     const mountElement = document.getElementById('ref');
     if (mountElement) {
       init(mountElement).then((res: any) => {
         console.log(res.msg);
-        model3D.startRender();
+        if (res.status) {
+          model3D.startRender();
+        }
       });
     }
   }, []);
+
+  // 监听到材质变化
+  useEffect(() => {
+    // item的父类实际上是THREE.Object3D
+    const editFun = (item: any) => {
+      item.material = material;
+    };
+    if (!isFirstInit) {
+      model3D.editObject(uuid, editFun);
+    }
+    setIsFirstInit(false);
+    // 物体材质发生变化
+  }, [material]);
 
   return (
     <div className={styles.body}>

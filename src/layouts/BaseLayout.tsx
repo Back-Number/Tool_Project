@@ -9,6 +9,7 @@ const BaseLayout = (props: any) => {
     { label: '示例1', key: 'item-2', path: '/example1' },
     { label: '示例2', key: 'item-3', path: '/example2' },
     { label: '示例3', key: 'item-4', path: '/example3' },
+    { label: '示例4', key: 'item-5', path: '/example4' },
   ];
 
   const itemchange = (data: any) => {

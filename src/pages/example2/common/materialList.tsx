@@ -1,31 +1,46 @@
 import * as THREE from 'three';
 
-const materialList = {
-  // 基础线条材质
-  LineBasicMaterial: new THREE.LineBasicMaterial({
-    color: 0x049ef4,
-    linewidth: 1,
-    linecap: 'round',
-    linejoin: 'round',
-  }),
-  // 虚线材质
-  LineDashedMaterial: new THREE.LineDashedMaterial({
-    color: 0x049ef4,
-    linewidth: 1,
-    scale: 1,
-    dashSize: 3,
-    gapSize: 1,
-  }),
-  // 基础网格材质
-  MeshBasicMaterial: new THREE.MeshBasicMaterial({
-    color: 0x049ef4,
-  }),
-  // 深度网格材质
-  MeshDepthMaterial: new THREE.MeshDepthMaterial({}),
-  // 未知材质1
-  MeshDistanceMaterial: new THREE.MeshDistanceMaterial({}),
-  // Lambert网格材质
-  MeshLambertMaterial: new THREE.MeshLambertMaterial({}),
+// 材质列表
+const materialList = (name: string, option?: Object) => {
+  switch (name) {
+    case 'LineBasicMaterial':
+      // 基础线条材质
+      return new THREE.LineBasicMaterial({
+        color: 0x049ef4,
+        linewidth: 1,
+        linecap: 'round',
+        linejoin: 'round',
+        ...option,
+      });
+    case 'LineDashedMaterial':
+      // 虚线材质
+      return new THREE.LineDashedMaterial({
+        color: 0x049ef4,
+        linewidth: 1,
+        scale: 1,
+        dashSize: 3,
+        gapSize: 1,
+        ...option,
+      });
+    case 'MeshBasicMaterial':
+      // 基础网格材质
+      return new THREE.MeshBasicMaterial({
+        color: 0x049ef4,
+        ...option,
+      });
+    case 'MeshDepthMaterial':
+      // 深度网格材质
+      return new THREE.MeshDepthMaterial({});
+    case 'MeshDistanceMaterial':
+      // unkonw
+      return new THREE.MeshDistanceMaterial({});
+    case 'MeshLambertMaterial':
+      // Lambert网格材质
+      return new THREE.MeshLambertMaterial({});
+    default:
+      console.log('生成了默认材质');
+      return new THREE.MeshLambertMaterial({});
+  }
 };
 
 export default materialList;

@@ -2,8 +2,6 @@
  *  通用场景基类
  */
 
-import { DOMElement } from 'react';
-
 export default class basicModal {
   //属性
   scene: THREE.Scene; // 场景
@@ -42,6 +40,23 @@ export default class basicModal {
   // 向场景中添加物体
   add(object: THREE.Object3D): void {
     this.scene.add(object);
+  }
+
+  // 删除场景中的对象
+  delete(uuid: string): void {
+    console.log('执行删除');
+  }
+
+  // 编辑场景中的对象
+  editObject(uuid: string, editFun: Function): void {
+    // console.log('操作对象', uuid);
+    // console.log('场景', this.scene.children);
+    let index = this.scene.children.findIndex((item) => {
+      return item.uuid === uuid;
+    });
+    if (index !== -1) {
+      editFun(this.scene.children[index]);
+    }
   }
 
   // 设置渲染动画函数
