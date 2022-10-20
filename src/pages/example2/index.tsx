@@ -2,8 +2,9 @@ import styles from './styles.less';
 import { useEffect, useState } from 'react';
 import * as THREE from 'three';
 import * as dat from 'dat.gui';
+import { debounce } from 'lodash';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import materialList from './common/materialList';
+import { materialList, getGuiOptionList } from './common/materialList';
 import basicModal from '@/components/basicModel';
 import { PromiseRes } from '@/utils/structs';
 // import * as SceneUtils from 'three/examples/jsm/utils/SceneUtils';
@@ -23,7 +24,8 @@ const Example2 = (props: any) => {
   const [uuid, setUuid] = useState(''); // 记录当前对象uuid
   const [materialName, setMaterialName] = useState('LineBasicMaterial'); // 记录材质名称
   const [material, setMaterial] = useState(materialList('LineBasicMaterial')); // 记录当前物体的材质
-  const [gui, setGui] = useState(new dat.GUI({})); // gui控件
+  const [gui, setGui] = useState<any>(undefined); // 记录GUI实例
+  const [guiOptionObject, setGuiOptionObject] = useState({}); // GUI属性对象
   const [isFirstInit, setIsFirstInit] = useState(true); // 标记是否是初次渲染
 
   // GUI控件对象
@@ -43,11 +45,44 @@ const Example2 = (props: any) => {
 
   // 添加参数调节界面
   const addGUIControl = () => {
-    gui.add(option, 'materialName', nameList).onChange((e: string) => {
-      console.log(e);
-      setMaterialName(e);
-      setMaterial(materialList(e));
-    });
+    // if (gui) {
+    //   gui.destroy();
+    // }
+    // const { optionObject, config } = getGuiOptionList(materialName);
+    // setGuiOptionObject(optionObject);
+    // const myGui = new dat.GUI({});
+    // setGui(myGui);
+    // myGui
+    //   .add(option, 'materialName', nameList)
+    //   .name('材质名称')
+    //   .onChange((e: string) => {
+    //     setMaterialName(e);
+    //     setMaterial(materialList(e));
+    //   });
+    // config.forEach((item) => {
+    //   if (item.name === 'color') {
+    //     myGui
+    //       .addColor(optionObject, item.name)
+    //       .name(item.name)
+    //       .onChange(
+    //         debounce(() => {
+    //           console.log('变化', optionObject);
+    //           setGuiOptionObject(JSON.parse(JSON.stringify(optionObject)));
+    //         }, 500),
+    //       );
+    //   } else {
+    //     //
+    //     myGui
+    //       .add(optionObject, item.name, ...item.configOption)
+    //       .name(item.name)
+    //       .onChange(
+    //         debounce(() => {
+    //           console.log('变化', optionObject);
+    //           setGuiOptionObject(JSON.parse(JSON.stringify(optionObject)));
+    //         }, 500),
+    //       );
+    //   }
+    // });
   };
 
   // 设置相机参数
@@ -162,7 +197,6 @@ const Example2 = (props: any) => {
     const mountElement = document.getElementById('ref');
     if (mountElement) {
       init(mountElement).then((res: any) => {
-        console.log(res.msg);
         if (res.status) {
           model3D.startRender();
         }
@@ -177,11 +211,17 @@ const Example2 = (props: any) => {
       item.material = material;
     };
     if (!isFirstInit) {
+      console.log('设置新材质');
       model3D.editObject(uuid, editFun);
     }
     setIsFirstInit(false);
-    // 物体材质发生变化
   }, [material]);
+
+  // 材质参数变化生成新材质
+  useEffect(() => {
+    console.log('材质对象改变了', guiOptionObject);
+    setMaterial(materialList(materialName, guiOptionObject));
+  }, [guiOptionObject]);
 
   return (
     <div className={styles.body}>
