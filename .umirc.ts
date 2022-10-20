@@ -1,6 +1,9 @@
 import { defineConfig } from 'umi';
 import { resolve } from 'path';
 import routeList from './src/common/routers';
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 
 export default defineConfig({
   title: 'BackNumber-authorTool',
@@ -17,7 +20,15 @@ export default defineConfig({
       .loader('url-loader')
       .options({})
       .end();
+    // 开启包体分析
+    config.plugin('BundleAnalyzerPlugin').use(BundleAnalyzerPlugin, [{}]);
+    // 开启时间分析
+    config.plugin('SpeedMeasurePlugin').use(SpeedMeasurePlugin, [{}]);
+    config.optimization.minimize(true);
+    config.optimization.usedExports(true);
+    config.optimization.sideEffects(true);
   },
+
   nodeModulesTransform: {
     type: 'none',
   },
