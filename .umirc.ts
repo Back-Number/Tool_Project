@@ -4,6 +4,7 @@ import routeList from './src/common/routers';
 const BundleAnalyzerPlugin =
   require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 export default defineConfig({
   title: 'BackNumber-authorTool',
@@ -11,22 +12,29 @@ export default defineConfig({
     slave: {},
   },
 
+  // 启用webpack5（默认启用了缓存）
+  // webpack5: {},
+
   // 配置glft导入
   chainWebpack(config) {
     config.module
       .rule('glft')
-      .test(/\.(glft)$/)
-      .use('')
+      .test(/\.(glb|gltf)$/)
+      .use('url-loader')
       .loader('url-loader')
-      .options({})
       .end();
+    // .use('file-loader')
+    // .loader('file-loader')
+    // .end();
+
     // 开启包体分析
-    config.plugin('BundleAnalyzerPlugin').use(BundleAnalyzerPlugin, [{}]);
+    // config.plugin('BundleAnalyzerPlugin').use(BundleAnalyzerPlugin, [{}]);
     // 开启时间分析
-    config.plugin('SpeedMeasurePlugin').use(SpeedMeasurePlugin, [{}]);
-    config.optimization.minimize(true);
-    config.optimization.usedExports(true);
-    config.optimization.sideEffects(true);
+    // config.plugin('SpeedMeasurePlugin').use(SpeedMeasurePlugin, [{}]);
+    // 开启打包裁剪压缩优化（但时间反而变多了？）
+    // config.optimization.minimize(true);
+    // config.optimization.usedExports(true);
+    // config.optimization.sideEffects(true);
   },
 
   nodeModulesTransform: {

@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as SceneUtils from 'three/examples/jsm/utils/SceneUtils';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
 const Example3 = (props: any) => {
   useEffect(() => {
@@ -65,11 +66,21 @@ const Example3 = (props: any) => {
 
       // 外部模型导入
       const gltfLoader = new GLTFLoader();
+
+      // DRACOLoader压缩模型
+      const dracoLoader = new DRACOLoader();
+      // 压缩方法路径
+      // dracoLoader.setDecoderPath('/assets/draco');
+      dracoLoader.preload();
+      gltfLoader.setDRACOLoader(dracoLoader);
+
       gltfLoader.load(
         'models/Lantern/glTF/Lantern.gltf',
+        // 'models/Lantern/glTF/pimon.glb',
+        // 'models/Pimon/pimon.glb',
         (gltf) => {
+          console.log('导入内容', gltf);
           gltf.scene.traverse(function (node) {
-            console.log(node.type);
             if (node.type === 'Mesh') {
               node.castShadow = true;
             }
