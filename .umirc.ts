@@ -8,10 +8,6 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 export default defineConfig({
   title: 'BackNumber-authorTool',
-  qiankun: {
-    slave: {},
-  },
-
   // 启用webpack5（默认启用了缓存）
   // webpack5: {},
 
@@ -44,7 +40,6 @@ export default defineConfig({
   history: {
     type: 'hash',
   },
-  // mfsu: {},
   alias: {
     '@components': resolve(__dirname, './src/components'),
     '@utils': resolve(__dirname, './src/utils'),
