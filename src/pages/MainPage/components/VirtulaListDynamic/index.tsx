@@ -94,7 +94,6 @@ const VirtulaListDynamic = (props: any) => {
 
   // 虚拟列表
   const virtualList = () => {
-    console.log('缓存', positions);
     const renderData = data.slice(startIndex, endIndex); // 实际渲染的可视数据
 
     // 发生滚动
@@ -104,9 +103,10 @@ const VirtulaListDynamic = (props: any) => {
         return item.bottom > scrollTop;
       });
 
-      let startIndex = Math.floor(scrollTop / forecastH); // 起始位置
+      let startIndex = starPosition >= 1 ? starPosition - 1 : 0; // 起始位置
       let endIndex = startIndex + showItem; // 结束位置
-      const offset = starPosition > 1 ? positions[starPosition - 1].bottom : 0; // 偏移量
+      const offset = starPosition >= 1 ? positions[starPosition - 1].top : 0; // 偏移量
+      console.log('offset: ', offset);
 
       if (startIndex > 2) startIndex -= 2; // 首尾多渲染两条数据，减少空白
       if (endIndex < itemNum - 1) endIndex += 2;
