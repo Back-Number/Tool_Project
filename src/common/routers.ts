@@ -5,6 +5,7 @@ const routeList = [
     routes: [
       { exact: true, path: '/', redirect: '/home' },
       { path: '/home', component: '@/pages/MainPage' },
+      { path: '/frame', component: '@/pages/Frame' },
     ],
   },
 ];
