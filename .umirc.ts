@@ -1,8 +1,7 @@
 import { defineConfig } from 'umi';
 import { resolve } from 'path';
 import routeList from './src/common/routers';
-const BundleAnalyzerPlugin =
-  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
@@ -19,9 +18,12 @@ export default defineConfig({
       .use('url-loader')
       .loader('url-loader')
       .end();
-    // .use('file-loader')
-    // .loader('file-loader')
-    // .end();
+    config.module
+      .rule('mp3')
+      .test(/\.(mp3)$/)
+      .use('file-loader')
+      .loader('file-loader')
+      .end();
 
     // 开启包体分析
     // config.plugin('BundleAnalyzerPlugin').use(BundleAnalyzerPlugin, [{}]);

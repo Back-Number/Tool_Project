@@ -1,47 +1,44 @@
 import React, { useEffect } from 'react';
 
-import token from './config';
-
+const testMusicDemo = require('../../assets/music/testMusicDemo.mp3');
+const { fetch } = window;
 const Frame = (props: any) => {
   useEffect(() => {
-    getAudio();
+    console.log('导入结果', testMusicDemo);
+    initMusic();
   });
 
-  // 获取音频文件
-  const getAudio = () => {
-    const option = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain',
-      },
-      body: `access_token=${token}&domain=1&language=zh&voice_name=Jiaojiao&text=今天你过得还可以吗`,
+  const initMusic = async () => {
+    const proccessor = async (reader: ReadableStreamDefaultReader) => {
+      let res: number[] = [];
+      await reader.read().then(async function processRead({ done, value }) {
+        if (done) {
+          return res;
+        }
+        res = [...res, ...value];
+        await reader.read().then(processRead);
+      });
+      return new Uint8Array(res);
     };
 
-    AudioContextRequest(option);
-  };
-
-  // 采用AudioContext的方式（也涵盖了自动播放策略）
-  const AudioContextRequest = async (option: object) => {
-    const audioContext = new AudioContext({ latencyHint: 'balanced' });
-    const data = await getAudioData(option);
-    const decodeData = await audioContext.decodeAudioData(data);
-
-    const sourceNode = audioContext.createBufferSource();
-    sourceNode.buffer = decodeData;
-    sourceNode.connect(audioContext.destination);
-    sourceNode.start(0);
-  };
-
-  // 请求获取音频资源
-  const getAudioData = async (option: object) => {
-    return window.fetch('https://openapi.data-baker.com/tts', option).then((res) => {
-      return res.arrayBuffer();
+    await fetch(testMusicDemo.default).then(async (result) => {
+      console.log('请求结果', result);
+      if (result.status === 200 && result.body) {
+        const reader = result.body.getReader();
+        const resultUnit8Arr = await proccessor(reader);
+        const audioContext = new AudioContext({ latencyHint: 'balanced' });
+        const decodeData = await audioContext.decodeAudioData(resultUnit8Arr.buffer);
+        const sourceNode = audioContext.createBufferSource();
+        sourceNode.buffer = decodeData;
+        sourceNode.connect(audioContext.destination);
+        sourceNode.start(0);
+      }
     });
   };
 
   return (
     <div>
-      <span>这是一个iframe</span>
+      <span>这是一个iframe,采用AudioContext进行播放</span>
     </div>
   );
 };
