@@ -7,9 +7,11 @@ import VirtualList from './components/VirtualList';
 import VirtulaListDynamic from './components/VirtulaListDynamic';
 import FileDemo from './components/FileDemo';
 import AutoPlayDemo from './components/AutoPlayDemo';
+import IframeDemo from './components/IframeDemo';
 
 const MainPage = (props: any) => {
-  const [page, setPage] = useState('AutoPlayDemo');
+  // const [page, setPage] = useState('AutoPlayDemo');
+  const [page, setPage] = useState('IframeDemo');
 
   const menuItems = [
     { label: '主页', key: 'none' },
@@ -17,6 +19,7 @@ const MainPage = (props: any) => {
     { label: '动态虚拟列表', key: 'VirtulaListDynamic' },
     { label: '文件处理Demo', key: 'FileDemo' },
     { label: '音频自动播放Demo', key: 'AutoPlayDemo' },
+    { label: 'Iframe自动播放Demo', key: 'IframeDemo' },
   ];
 
   // 切换子项
@@ -30,6 +33,8 @@ const MainPage = (props: any) => {
         return <FileDemo />;
       case 'AutoPlayDemo':
         return <AutoPlayDemo />;
+      case 'IframeDemo':
+        return <IframeDemo />;
       default:
         return <VirtualList />;
     }
