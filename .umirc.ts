@@ -59,5 +59,10 @@ export default defineConfig({
       changeOrigin: true,
       pathRewrite: { '^/baseline': '' },
     },
+    '/ttsServer': {
+      target: 'https://nls-gateway-cn-shanghai.aliyuncs.com',
+      changeOrigin: true,
+      pathRewrite: { '^/ttsServer': '' },
+    },
   },
 });

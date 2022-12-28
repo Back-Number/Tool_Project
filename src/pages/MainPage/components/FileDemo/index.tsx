@@ -5,6 +5,11 @@ import styles from './styles.less';
 
 const FileDemo = (props: any) => {
   const [url, setUrl] = useState<ArrayBuffer | null | string>(null);
+  const [arrayBuffer, setArrayBuffer] = useState<ArrayBuffer | null | string>(null);
+
+  useEffect(() => {
+    console.log('读取完成', arrayBuffer);
+  }, [arrayBuffer]);
 
   // 文件上传完成
   const fileLoad = (event: any) => {
@@ -12,25 +17,29 @@ const FileDemo = (props: any) => {
     console.log('载入完成', file);
     const reader = new FileReader();
     reader.onload = function (res) {
-      console.log('读取完成', this);
-      setUrl(this.result);
+      setArrayBuffer(this.result);
     };
 
-    // 正常读取
-    reader.readAsDataURL(file);
+    // 文本读取
+    // reader.readAsText(file);
 
-    //readAsBinaryString
+    // 正常读取
+    // reader.readAsDataURL(file);
+
+    // 二进制字符串
     // reader.readAsBinaryString(file);
 
-    //readAsArrayBuffer
-    // reader.readAsArrayBuffer(file);
+    // 字节数组读取
+    reader.readAsArrayBuffer(file);
   };
 
   return (
     <div className={styles['main']}>
       <div className={styles['input-wrapper']}>
         <input type="file" onChange={fileLoad}></input>
-        {url && <img src={String(url)}></img>}
+        {/* {url && <img src={String(url)}></img>} */}
+        {/* {url ? <audio src={String(url)} controls></audio> : null} */}
+        {/* {url ? <video src={String(url)} controls></video> : null} */}
       </div>
     </div>
   );
