@@ -21,7 +21,7 @@ const MainPage = (props: any) => {
     { label: '文件处理Demo', key: 'FileDemo' },
     { label: '音频自动播放Demo', key: 'AutoPlayDemo' },
     { label: 'Iframe自动播放Demo', key: 'IframeDemo' },
-    { label: '流式处理', key: 'StreamPlayDemo' },
+    { label: '流式传输Demo', key: 'StreamPlayDemo' },
     { label: '测试', key: 'TestDemo' },
   ];
 
